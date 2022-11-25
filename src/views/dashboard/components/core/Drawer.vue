@@ -106,10 +106,15 @@
 
     data: () => ({
       items: [
-      {
+	  {
           icon: 'mdi-database-check',
           title: 'storage dashboard',
           to: '/storagedashboard',
+        },
+		{
+          icon: 'mdi-database-check',
+          title: 'backups dashboard',
+          to: '/backupsdashboard',
         },
         {
           icon: 'mdi-view-dashboard',

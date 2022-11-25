@@ -1,118 +1,45 @@
 <template>
-  <v-container
-    id="dashboard"
-    fluid
-    tag="section"
-  >
-    <v-row>
-      <!--                               Arrays Health                          -->
-      <v-col 
-        cols="12" 
-        md="7"
-        >
-        <base-material-card
-          color="#E91E63"
-          class="px-5 py-3"
-        >
-          <template v-slot:heading>
-            <div class="display-2 font-weight-light">
-              <v-icon>
-                mdi-dip-switch
-              </v-icon>
-              Arrays Health
-            </div>
-          </template>
-          <v-card-text>
-            <v-data-table
-              :headers="arrays_headers"
-              :items="arrays_items"
-            >
-            <template v-slot:item.battery="{ item }">
-              <v-chip
-                :color="getColor(item.battery)"
-                dark
-              >
-                {{ item.battery }}
-              </v-chip>
-            </template>
-            <template v-slot:item.canister="{ item }">
-              <v-chip
-                :color="getColor(item.canister)"
-                dark
-              >
-                {{ item.canister }}
-              </v-chip>
-            </template>
-            <template v-slot:item.disks="{ item }">
-              <v-chip
-                :color="getColor(item.disks)"
-                dark
-              >
-                {{ item.disks }}
-              </v-chip>
-            </template>
-            <template v-slot:item.fc="{ item }">
-              <v-chip
-                :color="getColor(item.fc)"
-                dark
-              >
-                {{ item.fc }}
-              </v-chip>
-            </template>
-            <template v-slot:item.alerts="{ item }">
-              <v-chip
-                :color="getColor(item.alerts)"
-                dark
-              >
-                {{ item.alerts }}
-              </v-chip>
-            </template>
-            </v-data-table>
-          </v-card-text>
-        </base-material-card>
-      </v-col>
-      <v-col 
-        cols="12" 
-        lg="5"
-        >
-        <!--                             Switch Health                          -->
-        <base-material-card 
-          color="#E91E63" 
-          class="px-5 py-3"
-          >
-          <template v-slot:heading>
-            <div class="display-2 font-weight-light">
-              <v-icon>
-              mdi-dip-switch
-            </v-icon>
-            Switch Health
-            </div>
-          </template>
-          <v-card-text>
-            <v-data-table
-              :headers="switch_headers"
-              :items="switch_items"
-            >
-            <template v-slot:item.state="{ item }">
-              <v-chip
-                :color="getColor(item.state)"
-                dark
-              >
-                {{ item.state }}
-              </v-chip>
-            </template>
-            <template v-slot:item.ports="{ item }">
-              <v-chip
-                :color="getColor(item.ports)"
-                dark
-              >
-                {{ item.ports }}
-              </v-chip>
-            </template>
-            </v-data-table>
-          </v-card-text>
-        </base-material-card>
-        <!--                          Cloud Arrays Health                          -->
+	<v-container id="dashboard" fluid tag="section">
+		<v-row>
+		<!--                               Backup Jobs                          -->
+			<v-col cols="12" md="6">
+				<base-material-card color="#E91E63" class="px-5 py-3">
+					<template v-slot:heading>
+						<div class="display-2 font-weight-light">
+							<v-icon>mdi-dip-switch</v-icon>
+							Backup Jobs
+						</div>
+					</template>
+					<v-card-text>
+						<v-data-table
+							:headers="backup_job_headers"
+							:items="backup_job_items">
+						</v-data-table>
+					</v-card-text>
+				</base-material-card>
+			</v-col>
+			<v-col cols="12" lg="3">
+		<!--							Disk Pool State								-->
+				<base-material-card color="#E91E63" class="px-5 py-3" >
+					<template v-slot:heading>
+						<div class="display-2 font-weight-light">
+							<v-icon>mdi-dip-switch</v-icon>
+							Disk Pool State
+						</div>
+					</template>
+					<v-card-text>
+						<v-data-table 
+							:headers="diskpool_state_headers" 
+							:items="diskpool_state_items">
+							<template v-slot:item.ports="{ item }">
+								<v-chip :color="getColor(item.ports)" dark>
+									{{ item.ports }}
+								</v-chip>
+							</template>
+						</v-data-table>
+					</v-card-text>
+				</base-material-card>
+        <!--							Cloud Arrays Health							-->
         <base-material-card 
           color="#E91E63" 
           class="px-5 py-3">
@@ -450,33 +377,46 @@
             }],
           ],
         },
-        arrays_headers: [
-          { sortable: false, text: 'Device',   value: 'device', },
-          { sortable: false, text: 'Battery',  icon: 'mdi-battery', value: 'battery', },
-          { sortable: false, text: 'Canister', value: 'canister', },
-          { sortable: false, text: 'Disks',    value: 'disks', },
-          { sortable: false, text: 'FC',       value: 'fc', },
-          { sortable: false, text: 'Alerts',   value: 'alerts', },
+        backup_job_headers: [
+			{ sortable: false, text: 'Job ID',			value: 'job_id', },
+//			{ sortable: false, text: 'Job Policy',		value: 'job_policy', },
+//			{ sortable: false, text: 'Job Schedule',	value: 'job_schedule', },
+			{ sortable: false, text: 'Client',			value: 'client', },
+			{ sortable: false, text: 'Start Time',		value: 'start_time', },
+			{ sortable: false, text: 'Finish Time',		value: 'finish_time', },
+			{ sortable: false, text: 'Elapsed Time',	value: 'elapsed_time', },
+			{ sortable: true, text: 'Status',			value: 'status', },
         ],
-        arrays_items: [
-          { device: 'SVC-SV1', battery: 0, canister: 0, disks: 0, fc: 0, alerts: 0, },
-          { device: 'SVC-DH8', battery: 0, canister: 0, disks: 0, fc: 0, alerts: 2, },
-          { device: 'SIACEFLA01', battery: 1, canister: 0, disks: 0, fc: 0, alerts: 0, },
-          { device: 'SIACEFLA02', battery: 0, canister: 0, disks: 1, fc: 0, alerts: 0, },
-          { device: 'SIACEFLA03', battery: 0, canister: 0, disks: 0, fc: 0, alerts: 0, },
-          { device: 'SIACEFLA04', battery: 0, canister: 0, disks: 0, fc: 1, alerts: 0, },
-          { device: 'SIACEFLA05', battery: 0, canister: 1, disks: 0, fc: 0, alerts: 0, },
-          { device: 'SIACEFLA06', battery: 0, canister: 0, disks: 0, fc: 0, alerts: 0, },
-          { device: 'SIACEFLA07', battery: 0, canister: 0, disks: 0, fc: 0, alerts: 0, },
-        ],
-        switch_headers: [
-          { sortable: false, text: 'Switch',       value: 'switch', },
-          { sortable: false, text: 'State',        value: 'state', },
-          { sortable: false, text: 'Online Ports', value: 'ports', },
-        ],
-        switch_items: [
-          { switch: 'SIACESAN01', state: 1, ports: 0, },
-          { switch: 'SIACESAN02', state: 0, ports: 1, },
+        backup_job_items: [
+			{ job_id: 43105, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP07GLPXP-BKP', 	start_time: '10:03:33', finish_time: '10:25:12', 	elapsed_time: '00:21:49', status : 'Done', },
+			{ job_id: 43106, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NDHLSP03CECOP-BKP', 	start_time: '10:02:19', finish_time: '10:50:19', 	elapsed_time: '00:48:00', status : 'Done', },
+			{ job_id: 43107, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP05KMDBP-BKP', 	start_time: '10:03:33', finish_time: '10:25:12', 	elapsed_time: '00:21:49', status : 'Failed', },
+			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
+			{ job_id: 43108, job_policy: 'DHL_Servers_OS', job_schedule: 'Incr_D', 		client: 'NMXDHLSP09KMWBP-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
+			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM',	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
+			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
+		],
+		diskpool_state_headers: [
+			{ sortable: false, text: 'Disk Type', 			value: 'disk_type', },
+			{ sortable: false, text: 'Disk Volume Name',	value: 'disk_volume_type', },
+			{ sortable: false, text: 'Use %', 				value: 'use', },
+			{ sortable: true,  text: 'Status', 				value: 'status', },
+/*			{ sortable: false, text: 'Disk Media', 			value: 'disk_media', },
+			{ sortable: false, text: 'Total Capacity', 		value: 'total_capacity', },
+			{ sortable: false, text: 'Free Space', 			value: 'free_space', },
+			{ sortable: false, text: 'Version',				value: 'version', },
+			{ sortable: false, text: 'Disk Pool Name',		value: 'disk_pool_state', },
+			{ sortable: false, text: 'Num Read Mounts', 	value: 'num_read_mounts', },
+			{ sortable: false, text: 'Num Write Mounts', 	value: 'num_write_mounts', },
+			{ sortable: false, text: 'Cur Read Streams', 	value: 'cur_read_streams', },
+			{ sortable: false, text: 'Cur Write Streams', 	value: 'cur_write_streams', },
+			{ sortable: false, text: 'Num Repl Sources', 	value: 'num_repl_sources', },
+			{ sortable: false, text: 'Num Repl targets', 	value: 'num_repl_targets', },
+			{ sortable: false, text: 'WORM Lock Min Time', 	value: 'worm_lock_min_time', },
+			{ sortable: false, text: 'WORM Lock Max Time', 	value: 'worm_lock_max_time', },*/
+		],
+		diskpool_state_items: [
+			{ disk_type: 'Pure Disk', disk_volume_type: 'PureDiskVolume', use: 17, status: 'Ok'},
         ],
         cloud_headers: [
           { sortable: false, text: 'Device',      value: 'device', },

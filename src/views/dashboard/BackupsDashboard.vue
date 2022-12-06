@@ -297,6 +297,14 @@
   </v-container>
 </template>
 
+axios
+  .get('https://localhost:7198/api/job')
+  .then(response => (this.info = response.data.bpi)
+  console.log(response.data);
+  )
+
+
+
 <script>
   export default {
     name: 'DashboardDashboard',

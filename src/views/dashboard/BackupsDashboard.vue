@@ -2,7 +2,7 @@
 	<v-container id="dashboard" fluid tag="section">
 		<v-row>
 		<!--                               Backup Jobs                          -->
-			<v-col cols="12" md="6">
+			<v-col cols="12" md="7">
 				<base-material-card color="#E91E63" class="px-5 py-3">
 					<template v-slot:heading>
 						<div class="display-2 font-weight-light">
@@ -18,7 +18,7 @@
 					</v-card-text>
 				</base-material-card>
 			</v-col>
-			<v-col cols="12" lg="3">
+			<v-col cols="12" lg="5">
 		<!--							Disk Pool State								-->
 				<base-material-card color="#E91E63" class="px-5 py-3" >
 					<template v-slot:heading>
@@ -31,6 +31,26 @@
 						<v-data-table 
 							:headers="diskpool_state_headers" 
 							:items="diskpool_state_items">
+							<template v-slot:item.ports="{ item }">
+								<v-chip :color="getColor(item.ports)" dark>
+									{{ item.ports }}
+								</v-chip>
+							</template>
+						</v-data-table>
+					</v-card-text>
+				</base-material-card>
+        <!--							Disk state panel								-->
+				<base-material-card color="#E91E63" class="px-5 py-3" >
+					<template v-slot:heading>
+						<div class="display-2 font-weight-light">
+							<v-icon>mdi-dip-switch</v-icon>
+							Disk State panel
+						</div>
+					</template>
+					<v-card-text>
+						<v-data-table 
+							:headers="disk_state_headers" 
+							:items="disk_state_items">
 							<template v-slot:item.ports="{ item }">
 								<v-chip :color="getColor(item.ports)" dark>
 									{{ item.ports }}
@@ -377,6 +397,16 @@
             }],
           ],
         },
+        disk_state_headers: [
+			{ sortable: false, text: 'Drive', 			value: 'drive', },
+			{ sortable: false, text: 'Drive Path',	value: 'drive_path', },
+			{ sortable: false, text: 'Status', 				value: 'status', },
+			{ sortable: true,  text: 'Label', 				value: 'label', },	
+      { sortable: true,  text: 'Ready', 				value: 'ready', },			
+      ],
+      disk_state_items: [
+        { drive: '-', drive_path: '-', status: '-', 	label: '-', 	ready: '-'},
+      ],
         backup_job_headers: [
 			{ sortable: false, text: 'Job ID',			value: 'job_id', },
 //			{ sortable: false, text: 'Job Policy',		value: 'job_policy', },

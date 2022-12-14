@@ -103,9 +103,29 @@
 						</v-data-table>
 					</v-card-text>
 				</base-material-card>
+				<!--							Disk state panel								-->
+				<base-material-card color="#E91E63" class="px-5 py-3" >
+					<template v-slot:heading>
+						<div class="display-2 font-weight-light">
+							<v-icon>mdi-dip-switch</v-icon>
+							Disk State panel
+						</div>
+					</template>
+					<v-card-text>
+						<v-data-table 
+							:headers="disk_state_headers" 
+							:items="disk_state_items">
+							<template v-slot:item.ports="{ item }">
+								<v-chip :color="getColor(item.ports)" dark>
+									{{ item.ports }}
+								</v-chip>
+							</template>
+						</v-data-table>
+					</v-card-text>
+				</base-material-card>
 			</v-col>
-    </v-row>
-  </v-container>
+		</v-row>
+	</v-container>
 </template>
 
 <script>
@@ -172,6 +192,16 @@
 			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
 			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
         ],
+        disk_state_headers: [
+			{ sortable: false, text: 'Drive', 			value: 'drive', },
+			{ sortable: false, text: 'Drive Path',	value: 'drive_path', },
+			{ sortable: false, text: 'Status', 				value: 'status', },
+			{ sortable: true,  text: 'Label', 				value: 'label', },	
+			{ sortable: true,  text: 'Ready', 				value: 'ready', },			
+		],
+			disk_state_items: [
+        		{ drive: '-', drive_path: '-', status: '-', 	label: '-', 	ready: '-'},
+      	],
         tabs: 0,
         list: {
           0: false,

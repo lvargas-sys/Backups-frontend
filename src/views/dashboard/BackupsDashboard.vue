@@ -1,3 +1,4 @@
+
 <template>
 	<v-container id="dashboard" fluid tag="section">
 		<v-row>
@@ -13,7 +14,7 @@
 					<v-card-text>
 						<v-data-table items-per-page="50"
 							:headers="backup_job_headers"
-							:items="backup_job_items">
+							:items="itemsJob">
 							<template v-slot:item.status="{ item }">
 								<v-tooltip bottom>
 									<template v-slot:activator="{ on, attrs }">
@@ -105,34 +106,62 @@
 				</base-material-card>
 			</v-col>
     </v-row>
+
+
+	
+	
+	
   </v-container>
 </template>
-
-axios
-  .get('https://localhost:7198/api/job')
-  .then(response => (this.info = response.data.bpi)
-  console.log(response.data);
-  )
 
 
 
 <script>
+import { API } from "@/tools/API.js";
+
+import axios from "axios";
+
+
+
+
+
   export default {
     name: 'DashboardDashboard',
+ async mounted () {
+   axios
+      .get('https://localhost:7198/api/job/')
+      .then(async (response) => {
+		const data  = response.data
+		console.log("respuesta prueba ",response.data)
+		this.itemsJob = response.data;
+
+		//this.items = response.data.items;
+			/*data.forEach(async(element)=>{
+				this.items.push({ text:element.job_id, element.backup_client_name, element.start_datetime,element.end_datetime,element.elapsed_time,element.status})
+
+				
+			})*/
+		})	
+	//	await this.created()
+		//this.getAll()
+	//await this.getAll()
+  },
+
 
     data () {
+		
       return {
         backup_job_headers: [
 			{ sortable: false, text: 'Job ID',			value: 'job_id', },
 //			{ sortable: false, text: 'Job Policy',		value: 'job_policy', groupable:true, },
 //			{ sortable: false, text: 'Job Schedule',	value: 'job_schedule', },
-			{ sortable: false, text: 'Client',			value: 'client', },
-			{ sortable: false, text: 'Start Time',		value: 'start_time', },
-			{ sortable: false, text: 'Finish Time',		value: 'finish_time', },
+			{ sortable: false, text: 'Client',			value: 'id_cliente', },
+			{ sortable: false, text: 'Start Time',		value: 'start_datetime', },
+			{ sortable: false, text: 'Finish Time',		value: 'end_datetime', },
 			{ sortable: false, text: 'Elapsed Time',	value: 'elapsed_time', },
 			{ sortable: true,  text: 'Status',			value: 'status', 		align:'center', },
         ],
-        backup_job_items: [
+       /* backup_job_items: [
 			{ job_id: 43105, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP07GLPXP-BKP', 	start_time: '10:03:33', finish_time: '10:25:12', 	elapsed_time: '00:21:49', status : 'Done', },
 			{ job_id: 43106, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NDHLSP03CECOP-BKP', 	start_time: '10:02:19', finish_time: '10:50:19', 	elapsed_time: '00:48:00', status : 'Done', },
 			{ job_id: 43107, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP05KMDBP-BKP', 	start_time: '10:03:33', finish_time: '10:25:12', 	elapsed_time: '00:21:49', status : 'Failed', },
@@ -140,7 +169,7 @@ axios
 			{ job_id: 43108, job_policy: 'DHL_Servers_OS', job_schedule: 'Incr_D', 		client: 'NMXDHLSP09KMWBP-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
 			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM',	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
 			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
-		],
+		],*/
 		diskpool_state_headers: [
 			{ sortable: false, text: 'Disk Type', 			value: 'disk_type', },
 			{ sortable: false, text: 'Disk Volume Name',	value: 'disk_volume_name', },
@@ -180,6 +209,7 @@ axios
 			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
 			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
         ],
+		itemsJob: [],
         tabs: 0,
         list: {
           0: false,
@@ -206,6 +236,34 @@ axios
 			else if (usage < '90') return 'orange'
 			else return 'red'
 		},
+		async getAll() {
+			const url =
+				"{{endpoint}}/{{controller}}"
+				await API.get(url, {
+				params: {
+				endpoint: 'https://localhost:7198/api',
+				controller: process.env.VUE_APP_CAT_JOB,
+				},  /*headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    'Access-Control-Allow-Origin': '*' // Could work and fix the previous problem, but not in all APIs
+  },*/
+			
+			})
+			
+				.then(async (response) => {
+				//Recarga de lista
+				console.log("reponse "+response.data[0]);
+
+				})
+				.catch((e) => {
+				console.log(e);
+				throw e;
+				});
+		},
+
+
+
 	},
+
   }
 </script>

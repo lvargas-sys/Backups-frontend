@@ -10,11 +10,22 @@
 							<v-icon>mdi-dip-switch</v-icon>
 							Backup Jobs
 						</div>
+						
+	 
 					</template>
+					<v-text-field
+                      v-model="filtro"
+                      type="String"
+                      label="filtro"
+                      class="purple-input"
+                    />
+
+					<v-btn  class="mr-0" color="success" outlined text @click="getJobStatus(filtro)">Esatdo del job</v-btn>
 					<v-card-text>
 						<v-data-table items-per-page="50"
 							:headers="backup_job_headers"
 							:items="itemsJob">
+							
 							<template v-slot:item.status="{ item }">
 								<v-tooltip bottom>
 									<template v-slot:activator="{ on, attrs }">
@@ -103,6 +114,7 @@
 							</template>
 						</v-data-table>
 					</v-card-text>
+					
 				</base-material-card>
 			</v-col>
     </v-row>
@@ -145,8 +157,9 @@ import axios from "axios";
 	//	await this.created()
 		//this.getAll()
 	//await this.getAll()
+	
   },
-
+  
 
     data () {
 		
@@ -210,6 +223,8 @@ import axios from "axios";
 			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
         ],
 		itemsJob: [],
+		estadoJob:[],
+		filtro:"",
         tabs: 0,
         list: {
           0: false,
@@ -236,23 +251,22 @@ import axios from "axios";
 			else if (usage < '90') return 'orange'
 			else return 'red'
 		},
-		async getAll() {
+		async getJobStatus(estado) {
 			const url =
-				"{{endpoint}}/{{controller}}"
+				"{{endpoint}}/{{controller}}/"+estado
 				await API.get(url, {
 				params: {
 				endpoint: 'https://localhost:7198/api',
 				controller: process.env.VUE_APP_CAT_JOB,
-				},  /*headers: {
-    'Content-Type': 'application/json;charset=UTF-8',
-    'Access-Control-Allow-Origin': '*' // Could work and fix the previous problem, but not in all APIs
-  },*/
-			
+				estado:this.filtro,
+				},  
 			})
+			console.log(url)
 			
 				.then(async (response) => {
 				//Recarga de lista
-				console.log("reponse "+response.data[0]);
+				this.itemsJob = response.data;
+				//console.log("reponse "+response.data[0]);
 
 				})
 				.catch((e) => {
@@ -260,8 +274,6 @@ import axios from "axios";
 				throw e;
 				});
 		},
-
-
 
 	},
 

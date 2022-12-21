@@ -117,6 +117,11 @@
           to: '/backupsdashboard',
         },
         {
+          icon: 'mdi-database-check',
+          title: 'inserts',
+          to: '/insertjob',
+        },
+        {
           icon: 'mdi-view-dashboard',
           title: 'dashboard',
           to: '/',

@@ -261,16 +261,17 @@ import axios from "axios";
 				estado:this.filtro,
 				},  
 			})
-			console.log(url)
-			
 				.then(async (response) => {
+
+					//console.log("endpoint "+endpoint+"controller "+controller+"url "+url)
+			
 				//Recarga de lista
 				this.itemsJob = response.data;
-				//console.log("reponse "+response.data[0]);
+				//console.log("reponse "+response.data);
 
 				})
 				.catch((e) => {
-				console.log(e);
+				console.log("error "+e);
 				throw e;
 				});
 		},

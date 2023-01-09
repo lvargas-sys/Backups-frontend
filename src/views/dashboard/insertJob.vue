@@ -139,14 +139,29 @@
                     cols="12"
                     md="4"
                   >
-                    <v-text-field
+                    <!--<v-text-field
                       v-model="dispositivo.id_cliente"
                       type="String"
                       label="id_cliente"
                       class="purple-input"
-                    />
+                    />-->
+                
+                     <!-- <select id="clientes" class="form-control" label="Cliente" v-model="clienteSeleccionado"  >
+                        <option value="0">Seleccione cliente</option>
+                      <option v-for="(value, key) in clientes" :value="key" :key="key" >{{value.nombre_cliente}}</option>
+                      </select>-->
+                     
+                  
 
-                   
+                   <select v-model="clienteSeleccionado">
+                    <option value="-1">Seleccione cliente</option>
+                  <option v-for="cliente in clientes" v-bind:value="cliente.id_cliente">
+                    {{ cliente.nombre_cliente }}
+                  </option>
+                </select>
+
+  <!--<span >Selected: {{ clienteSeleccionado }}</span>-->
+                
 
                   </v-col>
   
@@ -194,9 +209,58 @@ import { API } from "@/tools/API.js";
 
 
   export default {
+    name: 'DashboardDashboard',
+   /* async mounted () {
+    const url = "{{endpoint}}/api/{{controller}}/";
+        await API.get(url, {
+          params: {
+            endpoint:'https://localhost:7198', 
+            controller: 'customers',
+            //id_cliente:id_cliente
+          },
+          data: data,
+        })
+          .then(async (response) => {
+            //Recarga de lista
+            console.log(response.data);
+            this.clientes.push(response.data);
+           
+           
+          })
+          .catch((e) => {
+            // Ocurrió un error en el API
+            console.log(e);
+            
+            throw e;
+          })
+    },*/
+
+
+    async mounted () {
+   axios
+      .get('https://localhost:7198/api/customers/')
+      .then(async (response) => {
+		const data  = response.data
+		console.log("respuesta prueba ",response.data)
+		this.clientes = response.data;
+    
+
+		//this.items = response.data.items;
+			/*data.forEach(async(element)=>{
+				this.items.push({ text:element.job_id, element.backup_client_name, element.start_datetime,element.end_datetime,element.elapsed_time,element.status})
+
+				
+			})*/
+		})	
+	//	await this.created()
+		//this.getAll()
+	//await this.getAll()
+	
+  },
 
   data() {
     return {
+    
     
     cliente:
     {
@@ -216,11 +280,17 @@ import { API } from "@/tools/API.js";
       id_cliente:0
     },
 
-    
+   
+   
     snack: false,
     snackColor: "",
     snackText: "",
+    clienteSeleccionado:'-1',
+    clientes: [], // <-- La lista de docentes
+ 
+   
     };
+
   },
   methods:{
 
@@ -249,12 +319,13 @@ import { API } from "@/tools/API.js";
         end_life:this.dispositivo.end_life,//date
         end_support:this.dispositivo.end_support,//date	
         tipo:this.dispositivo.tipo,
-        id_cliente:this.dispositivo.id_cliente
+        id_cliente:this.clienteSeleccionado
         
         };
-
+      
         await this.newDevice(data);
-      console.log("data",data);
+        console.log("data",data);
+      
     }
 
     },
@@ -317,8 +388,11 @@ import { API } from "@/tools/API.js";
      
     },
 
+ 
+
     
   }
 }
+
   </script>
   

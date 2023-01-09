@@ -26,7 +26,7 @@
 							:headers="backup_job_headers"
 							:items="itemsJob">
 							
-							<template v-slot:item.status="{ item }">
+							<template v-slot:item.status="{item}">
 								<v-tooltip bottom>
 									<template v-slot:activator="{ on, attrs }">
 										<span v-bind="attrs" v-on="on">

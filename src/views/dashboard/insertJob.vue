@@ -101,29 +101,7 @@
                     />
                   </v-col>
   
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="dispositivo.end_life" 
-                      label="end_life"
-                      class="purple-input"
-                      type="date"
-                    />
-                  </v-col>
-  
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="dispositivo.end_support"
-                      label="end_support"
-                      class="purple-input"
-                      type="date"
-                    />
-                  </v-col>
+                
   
                   <v-col cols="12" md="4">
                     
@@ -139,20 +117,7 @@
                     cols="12"
                     md="4"
                   >
-                    <!--<v-text-field
-                      v-model="dispositivo.id_cliente"
-                      type="String"
-                      label="id_cliente"
-                      class="purple-input"
-                    />-->
-                
-                     <!-- <select id="clientes" class="form-control" label="Cliente" v-model="clienteSeleccionado"  >
-                        <option value="0">Seleccione cliente</option>
-                      <option v-for="(value, key) in clientes" :value="key" :key="key" >{{value.nombre_cliente}}</option>
-                      </select>-->
-                     
-                  
-
+                    
                    <select v-model="clienteSeleccionado">
                     <option value="-1">Seleccione cliente</option>
                   <option v-for="cliente in clientes" v-bind:value="cliente.id_cliente">
@@ -164,6 +129,57 @@
                 
 
                   </v-col>
+
+                  <v-col cols="12" md="4">
+                    
+                    <v-text-field
+                      v-model="dispositivo.performance"
+                      type="Boolean"
+                      label="performance"
+                      class="purple-input"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
+                    
+                    <v-text-field
+                      v-model="dispositivo.system_id"
+                      type="String"
+                      label="system_id"
+                      class="purple-input"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
+                    
+                    <v-text-field
+                      v-model="dispositivo.tenant_cmdb"
+                      type="String"
+                      label="tenant_cmdb"
+                      class="purple-input"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
+                    
+                    <v-text-field
+                      v-model="dispositivo.assignament_group"
+                      type="String"
+                      label="assignament_group"
+                      class="purple-input"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    
+                    <v-text-field
+                      v-model="dispositivo.category"
+                      type="String"
+                      label="category"
+                      class="purple-input"
+                    />
+                  </v-col>
+  
+  
   
                 
   
@@ -210,31 +226,6 @@ import { API } from "@/tools/API.js";
 
   export default {
     name: 'DashboardDashboard',
-   /* async mounted () {
-    const url = "{{endpoint}}/api/{{controller}}/";
-        await API.get(url, {
-          params: {
-            endpoint:'https://localhost:7198', 
-            controller: 'customers',
-            //id_cliente:id_cliente
-          },
-          data: data,
-        })
-          .then(async (response) => {
-            //Recarga de lista
-            console.log(response.data);
-            this.clientes.push(response.data);
-           
-           
-          })
-          .catch((e) => {
-            // Ocurrió un error en el API
-            console.log(e);
-            
-            throw e;
-          })
-    },*/
-
 
     async mounted () {
    axios
@@ -244,17 +235,7 @@ import { API } from "@/tools/API.js";
 		console.log("respuesta prueba ",response.data)
 		this.clientes = response.data;
     
-
-		//this.items = response.data.items;
-			/*data.forEach(async(element)=>{
-				this.items.push({ text:element.job_id, element.backup_client_name, element.start_datetime,element.end_datetime,element.elapsed_time,element.status})
-
-				
-			})*/
 		})	
-	//	await this.created()
-		//this.getAll()
-	//await this.getAll()
 	
   },
 
@@ -274,10 +255,13 @@ import { API } from "@/tools/API.js";
       nombre_dispositivo:"",
       contrato_soporte:"",//Date
       ip:"",
-      end_life:"",//date
-      end_support:"",//date	
       tipo:"",
-      id_cliente:0
+      id_cliente:0,
+      performance:true, 
+      system_id:"", 
+      tenant_cmdb:"",
+      assignament_group:"",
+      category:""
     },
 
    
@@ -286,7 +270,7 @@ import { API } from "@/tools/API.js";
     snackColor: "",
     snackText: "",
     clienteSeleccionado:'-1',
-    clientes: [], // <-- La lista de docentes
+    clientes: [], 
  
    
     };
@@ -304,7 +288,7 @@ import { API } from "@/tools/API.js";
           };
 
           await this.newCliente(data);
-        console.log("data",data);
+        //console.log("data",data);
       }
 
     },
@@ -316,15 +300,17 @@ import { API } from "@/tools/API.js";
         nombre_dispositivo:this.dispositivo.nombre_dispositivo,
         contrato_soporte:this.dispositivo.contrato_soporte,//Date
         ip:this.dispositivo.ip,
-        end_life:this.dispositivo.end_life,//date
-        end_support:this.dispositivo.end_support,//date	
         tipo:this.dispositivo.tipo,
-        id_cliente:this.clienteSeleccionado
-        
+        id_cliente:this.clienteSeleccionado,
+        performance:this.dispositivo.performance, 
+        system_id:this.dispositivo.system_id, 
+        tenant_cmdb:this.dispositivo.tenant_cmdb,
+        assignament_group:this.dispositivo.assignament_group,
+        category:this.dispositivo.category   
         };
-      
+       // console.log("data de dispoitivo",data);
         await this.newDevice(data);
-        console.log("data",data);
+        
       
     }
 

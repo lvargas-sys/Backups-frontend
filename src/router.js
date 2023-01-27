@@ -23,6 +23,12 @@ export default new Router({
 			path: 'BackupsDashboard',
 			component: () => import('@/views/dashboard/BackupsDashboard'),
 		  },
+        // Insert Dashboard JOB
+        {
+          name: 'Insert Job',
+          path: 'insertJob',
+          component: () => import('@/views/dashboard/insertJob'),
+          },
 			// Dashboard
         {
           name: 'Dashboard',

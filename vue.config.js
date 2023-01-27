@@ -1,7 +1,10 @@
 module.exports = {
   devServer: {
 //    disableHostCheck: true,
+proxy: 'https://localhost:7198',
+headers: { "Access-Control-Allow-Origin": "*" }
   },
+ 
 
   transpileDependencies: ['vuetify'],
 

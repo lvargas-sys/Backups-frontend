@@ -11,12 +11,6 @@ export default new Router({
       path: '/',
       component: () => import('@/views/dashboard/Index'),
       children: [
-        // Storage Dashboard
-        {
-			name: 'Storage Dashboard',
-			path: 'StorageDashboard',
-			component: () => import('@/views/dashboard/StorageDashboard'),
-		  },
         // Backups Dashboard
         {
 			name: 'Backups Dashboard',

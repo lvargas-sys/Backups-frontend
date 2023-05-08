@@ -2,13 +2,13 @@
 <template>
 	<v-container id="dashboard" fluid tag="section">
 		<v-row>
-		<!--								B A C K U P   J O B S									-->
 			<v-col cols="12" md="7">
+				<!---------------------------------B A C K U P   J O B S-------------------------------->
 				<base-material-card color="#E91E63" class="px-5 py-3">
 					<template v-slot:heading>
 						<div class="display-2 font-weight-light">
 							<v-icon>mdi-dip-switch</v-icon>
-							Backup Jobs
+							Respaldos
 						</div>
 						
 	 
@@ -16,7 +16,7 @@
 					<v-text-field
                       v-model="filtro"
                       type="String"
-                      label="filtro"
+                      label="Filtro por estado"
                       class="purple-input"
                     />
 
@@ -24,7 +24,7 @@
 					<v-card-text>
 						<v-data-table items-per-page="50"
 							:headers="backup_job_headers"
-							:items="itemsJob">
+							:items="backup_job_items">
 							
 							<template v-slot:item.status="{ item }">
 								<v-tooltip bottom>
@@ -44,69 +44,36 @@
 						</v-data-table>
 					</v-card-text>
 				</base-material-card>
-			</v-col>
-			<v-col cols="12" lg="5">
-		<!--							D I S K   P O O L   S T A T E								-->
-				<base-material-card color="#E91E63" class="px-5 py-3" >
+				<!---------------------------------MANTENIMIENTO DE DRIVES-------------------------------->
+				<base-material-card color="#E91E63" class="px-5 py-3">
 					<template v-slot:heading>
 						<div class="display-2 font-weight-light">
 							<v-icon>mdi-dip-switch</v-icon>
-							Disk Pool State
+							Mantenimiento de Drives
 						</div>
+						
+	 
 					</template>
+					
 					<v-card-text>
-						<v-data-table
-							:headers="diskpool_state_headers" 
-							:items="diskpool_state_items">
-							<template v-slot:item.use="{ item }">
-								<v-chip :color="getUsageColor(item.use)" dark>
-									{{ item.use }}
-								</v-chip>
-							</template>
-							<template v-slot:item.status="{ item }">
-								<v-tooltip bottom>
-									<template v-slot:activator="{ on, attrs }">
-										<span v-bind="attrs" v-on="on">
-											<v-chip :color="getHealthStatusColor(item.status)" dark>
-												{{ item.status }}
-											</v-chip>
-										</span>
-									</template>
-									<span>
-										<b>Disk Type:</b> {{ item.disk_type }}<br/>
-										<b>Disk Volume Name:</b> {{ item.disk_volume_name }}<br/>
-										<b>Use:</b> {{ item.use }}<br/>
-										<b>Disk Media:</b> {{ item.disk_media }}<br/>
-										<b>Total Capacity:</b> {{ item.total_capacity }}<br/>
-										<b>Free Space:</b> {{ item.free_space }}<br/>
-										<b>Version:</b> {{ item.version }}<br/>
-										<b>Disk Pool Name:</b> {{ item.disk_pool_name }}<br/>
-										<b>Num Read Mounts:</b> {{ item.num_read_mounts }}<br/>
-										<b>Num Write Mounts:</b> {{ item.num_write_mounts }}<br/>
-										<b>Cur Read Streams:</b> {{ item.cur_read_streams }}<br/>
-										<b>Cur Write Streams:</b> {{ item.cur_write_streams }}<br/>
-										<b>Num Repl Sources:</b> {{ item.num_repl_sources }}<br/>
-										<b>Num Repl Targets:</b> {{ item.num_repl_targets }}<br/>
-										<b>WORM Lock Min Time:</b> {{ item.worm_lock_min_time }}<br/>
-										<b>WORM Lock Max Time:</b> {{ item.worm_lock_max_time }}<br/>
-									</span>
-								</v-tooltip>
-							</template>
+						<v-data-table items-per-page="50"
+							:headers="drives_headers"
+							:items="drives_items">
 						</v-data-table>
 					</v-card-text>
 				</base-material-card>
-		<!--							C L E A N I N G   S T A T U S								-->
+				<!-------------------------------------N A S---------------------------------------------------->
 				<base-material-card color="#E91E63" class="px-5 py-3" >
 					<template v-slot:heading>
 						<div class="display-2 font-weight-light">
 							<v-icon>mdi-dip-switch</v-icon>
-							Cleaning Status
+							NAS
 						</div>
 					</template>
 					<v-card-text>
 						<v-data-table 
-							:headers="cleaning_status_headers" 
-							:items="cleaning_status_items">
+							:headers="NAS_headers" 
+							:items="NAS_items">
 							<template v-slot:item.ports="{ item }">
 								<v-chip :color="getColor(item.ports)" dark>
 									{{ item.ports }}
@@ -116,34 +83,45 @@
 					</v-card-text>
 					
 				</base-material-card>
-				<!--							Disk state panel								-->
+			</v-col>
+
+			<v-col cols="12" lg="5">
+				<!-------------------------------GRÁFICA DE ESTADO DE BACKUPS------------------------->
 				<base-material-card color="#E91E63" class="px-5 py-3" >
 					<template v-slot:heading>
 						<div class="display-2 font-weight-light">
 							<v-icon>mdi-dip-switch</v-icon>
-							Disk State panel
+							Estatus de Respaldos
 						</div>
 					</template>
 					<v-card-text>
-						<v-data-table 
-							:headers="disk_state_headers" 
-							:items="disk_state_items">
-							<template v-slot:item.ports="{ item }">
-								<v-chip :color="getColor(item.ports)" dark>
-									{{ item.ports }}
+					</v-card-text>
+				</base-material-card>
+
+				
+				<!----------------------------------LIBRERIAS----------------------------------------->
+				<base-material-card color="#E91E63" class="px-5 py-3" >
+					<template v-slot:heading>
+						<div class="display-2 font-weight-light">
+							<v-icon>mdi-dip-switch</v-icon>
+							Librerías
+						</div>
+					</template>
+					<v-card-text>
+						<v-data-table
+							:headers="libreria_headers" 
+							:items="libreria_items">
+							<template v-slot:item.use="{ item }">
+								<v-chip :color="getUsageColor(item.use)" dark>
+									{{ item.use }}
 								</v-chip>
 							</template>
 						</v-data-table>
 					</v-card-text>
 				</base-material-card>
 			</v-col>
-    </v-row>
-
-
-	
-	
-	
-  </v-container>
+    	</v-row>
+  	</v-container>
 </template>
 
 
@@ -186,75 +164,52 @@ import axios from "axios";
       return {
         backup_job_headers: [
 			{ sortable: false, text: 'Job ID',			value: 'job_id', },
-//			{ sortable: false, text: 'Job Policy',		value: 'job_policy', groupable:true, },
-//			{ sortable: false, text: 'Job Schedule',	value: 'job_schedule', },
-			{ sortable: false, text: 'Client',			value: 'id_cliente', },
-			{ sortable: false, text: 'Start Time',		value: 'start_datetime', },
-			{ sortable: false, text: 'Finish Time',		value: 'end_datetime', },
+			{ sortable: false, text: 'Client',			value: 'client', },
+			{ sortable: false, text: 'Start Time',		value: 'start_time', },
+			{ sortable: false, text: 'Finish Time',		value: 'finish_time', },
 			{ sortable: false, text: 'Elapsed Time',	value: 'elapsed_time', },
 			{ sortable: true,  text: 'Status',			value: 'status', 		align:'center', },
         ],
-       /* backup_job_items: [
-			{ job_id: 43105, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP07GLPXP-BKP', 	start_time: '10:03:33', finish_time: '10:25:12', 	elapsed_time: '00:21:49', status : 'Done', },
-			{ job_id: 43106, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NDHLSP03CECOP-BKP', 	start_time: '10:02:19', finish_time: '10:50:19', 	elapsed_time: '00:48:00', status : 'Done', },
-			{ job_id: 43107, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP05KMDBP-BKP', 	start_time: '10:03:33', finish_time: '10:25:12', 	elapsed_time: '00:21:49', status : 'Failed', },
-			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
-			{ job_id: 43108, job_policy: 'DHL_Servers_OS', job_schedule: 'Incr_D', 		client: 'NMXDHLSP09KMWBP-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
-			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM',	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
-			{ job_id: 43108, job_policy: 'DHL_Oracle_DB', job_schedule: 'Arch_10_AM', 	client: 'NMXDHLSP06KMDBB-BKP', 	start_time: '10:03:33', finish_time: '-', 			elapsed_time: '00:21:49', status : 'Running', },
-		],*/
-		diskpool_state_headers: [
-			{ sortable: false, text: 'Disk Type', 			value: 'disk_type', },
-			{ sortable: false, text: 'Disk Volume Name',	value: 'disk_volume_name', },
-			{ sortable: false, text: 'Use %', 				value: 'use', },
-			{ sortable: true,  text: 'Status', 				value: 'status', },
-/*			{ sortable: false, text: 'Disk Media', 			value: 'disk_media', },
-			{ sortable: false, text: 'Total Capacity', 		value: 'total_capacity', },
-			{ sortable: false, text: 'Free Space', 			value: 'free_space', },
-			{ sortable: false, text: 'Version',				value: 'version', },
-			{ sortable: false, text: 'Disk Pool Name',		value: 'disk_pool_name', },
-			{ sortable: false, text: 'Num Read Mounts', 	value: 'num_read_mounts', },
-			{ sortable: false, text: 'Num Write Mounts', 	value: 'num_write_mounts', },
-			{ sortable: false, text: 'Cur Read Streams', 	value: 'cur_read_streams', },
-			{ sortable: false, text: 'Cur Write Streams', 	value: 'cur_write_streams', },
-			{ sortable: false, text: 'Num Repl Sources', 	value: 'num_repl_sources', },
-			{ sortable: false, text: 'Num Repl targets', 	value: 'num_repl_targets', },
-			{ sortable: false, text: 'WORM Lock Min Time', 	value: 'worm_lock_min_time', },
-			{ sortable: false, text: 'WORM Lock Max Time', 	value: 'worm_lock_max_time', },*/
+       	backup_job_items: [
+			{ job_id: 'BCKP0001', job_policy: 'DHL_Oracle_DB', job_schedule: 'ARCH_10_AM', 	client: '2', 	start_time: '0000-00-00 00:00:00', finish_time: '0000-00-00 00:00:00', elapsed_time: '00:21:49', status : 'Done', },
 		],
-		diskpool_state_items: [
-			{ disk_type: 'Pure Disk', disk_volume_name: 'PureDiskVolume 1', use: 17, status: 'Ok'},
-			{ disk_type: 'Pure Disk', disk_volume_name: 'PureDiskVolume 2', use: 55, status: 'Ok'},
-			{ disk_type: 'Pure Disk', disk_volume_name: 'PureDiskVolume 3', use: 85, status: 'Ok'},
-			{ disk_type: 'Pure Disk', disk_volume_name: 'PureDiskVolume 4', use: 92, status: 'Ok'},
-			{ disk_type: 'Pure Disk', disk_volume_name: 'PureDiskVolume 4', use: 26, status: 'Nok'},
-        ],
-        cleaning_status_headers: [
-          { sortable: false, text: 'Drive name',	value: 'drive_name', },
-          { sortable: false, text: 'Type',			value: 'type', },
-          { sortable: false, text: 'Mount Type', 	value: 'mount_type', },
-          { sortable: false, text: 'Frequency',		value: 'frequency', },
-          { sortable: false, text: 'Last Clean',	value: 'last_clean', },
-          { sortable: false, text: 'Comment',		value: 'comment', },
-        ],
-        cleaning_status_items: [
-			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
-			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
-			{ drive_name: '-', type: '-', mount_type: '-', frequency: '-', last_clean: '-', comment: '-', },
-        ],
-		itemsJob: [],
 		estadoJob:[],
 		filtro:"",
-        disk_state_headers: [
-			{ sortable: false, text: 'Drive', 			value: 'drive', },
-			{ sortable: false, text: 'Drive Path',	value: 'drive_path', },
-			{ sortable: false, text: 'Status', 				value: 'status', },
-			{ sortable: true,  text: 'Label', 				value: 'label', },	
-			{ sortable: true,  text: 'Ready', 				value: 'ready', },			
+		drives_headers: [
+			{ sortable: false, text: 'Disk Type',			value: 'disk_type', },
+			{ sortable: false, text: 'Disk Media',			value: 'disk_media', },
+			{ sortable: false, text: 'Total Capacity',		value: 'total_capacity', },
+			{ sortable: false, text: 'Free Capacity',		value: 'free_capacity', },
+			{ sortable: false, text: 'Reading at',	value: 'reading_at', },
+        ],
+       	drives_items: [
+			{ disk_type: '246BCKPS', disk_media: '246BCKPS', total_capacity: '120.01', 	free_capacity: '12.01', reading_at: '2023-03-31 05:00:18', },
 		],
-			disk_state_items: [
-        		{ drive: '-', drive_path: '-', status: '-', 	label: '-', 	ready: '-'},
-      	],
+		libreria_headers: [
+			{ sortable: false, text: 'Drive',			value: 'drive', },
+			{ sortable: false, text: 'Drive Path',			value: 'drive_path', },
+			{ sortable: false, text: 'Status',		value: 'status', },
+			{ sortable: false, text: 'Label',		value: 'label', },
+			{ sortable: false, text: 'Ready',	value: 'ready', },
+			{ sortable: false, text: 'Fecha',	value: 'fecha', },
+        ],
+		libreria_items: [
+			{ drive: '21538', drive_path: '246BCKPS', status: 'Done', label: 'BCKPDHL_01', ready: 'Ready', fecha: '2023-03-31 5:00:18', },
+		],
+		NAS_headers: [
+			{ sortable: false, text: 'Device', 			value: 'device', },
+			{ sortable: false, text: 'Fan',	value: 'fan', },
+			{ sortable: false, text: 'Job Policy', 				value: 'job_policy', },
+			{ sortable: true,  text: 'Disks', 				value: 'disks', },
+			{ sortable: true,  text: 'Client', 				value: 'client', },
+			{ sortable: true,  text: 'Master Server', 				value: 'master_server', },
+			{ sortable: true,  text: 'Start Time', 				value: 'start_time', },
+			{ sortable: true,  text: 'End Time', 				value: 'end_time', },
+		],
+		NAS_items: [
+			{ device: '-', fan: '-', job_policy: '-', disks: '-', client: '-', master_server: '-', start_time: '-', end_time: '-', },
+        ],
+		//itemsJob: [],
         tabs: 0,
         list: {
           0: false,
